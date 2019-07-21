@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Sr.ApigRPCK6.Api
+namespace Sr.Reminder.WebApi
 {
 	public class Program
 	{
