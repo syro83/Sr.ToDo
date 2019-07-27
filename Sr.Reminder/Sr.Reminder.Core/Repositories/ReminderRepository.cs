@@ -13,17 +13,12 @@ namespace Sr.Reminder.Core.Repositories
 		{
 		}
 
-		public ValueTask<Dal.Reminder> GetById(int id)
-		{
-			return Context.Set<Dal.Reminder>().FindAsync(id);
-		}
-
 		public Task<IEnumerable<Dal.Reminder>> GetAllByCatgory(int categoryId)
 		{
 			//ToDo: SR:SR ! not implemented
 			var reminderCategory = new ReminderCategory() { };
 
-			return GetWhere(c => c.ReminderCategory.Contains(reminderCategory));
+			return Find(c => c.ReminderCategory.Contains(reminderCategory));
 		}
 	}
 }

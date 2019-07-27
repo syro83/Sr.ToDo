@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace Sr.Reminder.Core.Repositories
 {
-	public interface IReminderRepository : IRepositoryBase<Dal.Reminder>
+	public interface IUnitOfWork
 	{
-		Task<IEnumerable<Dal.Reminder>> GetAllByCatgory(int categoryId);
+		IReminderRepository Reminders { get; }
+
+		int Commit();
+		Task<int> CommitAsync();
+		void Rollback();
 	}
 }

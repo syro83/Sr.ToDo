@@ -53,6 +53,7 @@ namespace Sr.Reminder.WebApi
 			// DI repose
 			services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 			services.AddScoped(typeof(IReminderRepository), typeof(ReminderRepository));
+			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,18 +69,24 @@ namespace Sr.Reminder.WebApi
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+			app.UseStaticFiles();
 
+			// Runs matching. An endpoint is selected and set on the HttpContext if a match is found.
 			app.UseRouting();
 
+			// Middleware
+			app.UseCors();
+			app.UseHttpsRedirection();
 			app.UseAuthorization();
 
-			/*
+			// Core 3.0 executes the endpoint that was selected by routing.
+			// https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-core-3-0-preview-4/
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
+				//endpoints.MapRazorPages();
 			});
-			*/
+			
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.
 			app.UseSwagger();
@@ -92,7 +99,6 @@ namespace Sr.Reminder.WebApi
 				c.RoutePrefix = string.Empty;
 			});
 
-			app.UseMvc();
 		}
 	}
 }

@@ -15,13 +15,13 @@ namespace Sr.Reminder.WebApi.Controllers
 	[ApiController]
 	public class ReminderController : ControllerBase
 	{
-		private readonly IReminderRepository _reminderRepository;
+		private readonly IUnitOfWork _unitOfWork;
 		protected IMapper _Mapper = null;
 
 
-		public ReminderController(IReminderRepository reminderRepository)
+		public ReminderController(IUnitOfWork uow)
 		{
-			_reminderRepository = reminderRepository;
+			_unitOfWork = uow;
 
 			// ToDo: SR:SR Maybe use DI to inject the mapper
 			var config = new MapperConfiguration(cfg =>
@@ -45,7 +45,7 @@ namespace Sr.Reminder.WebApi.Controllers
 		[ProducesDefaultResponseType]
 		public async Task<ActionResult<IEnumerable<Models.Reminder>>> Get()
 		{
-			var reminders = await _reminderRepository.GetAll();
+			var reminders = await _unitOfWork.Reminders.GetAll();
 
 			var result = _Mapper.Map<List<Models.Reminder>>(reminders);
 			return this.Ok(result);
@@ -58,7 +58,7 @@ namespace Sr.Reminder.WebApi.Controllers
 		[ProducesDefaultResponseType]
 		public async Task<ActionResult<Models.Reminder>> Get(int id)
 		{
-			var reminder = await _reminderRepository.GetById(id);
+			var reminder = await _unitOfWork.Reminders.Get(id);
 
 			if (reminder == null)
 			{
@@ -103,7 +103,9 @@ namespace Sr.Reminder.WebApi.Controllers
 			}
 			var reminder = _Mapper.Map<Core.Dal.Reminder>(value);
 
-			await _reminderRepository.Add(reminder);
+			_unitOfWork.Reminders.Add(reminder);
+
+			await _unitOfWork.CommitAsync();
 
 			//var inserted = await _reminderRepository.Add(reminder);
 			//if (inserted == null || inserted.Id <= 0)
@@ -133,6 +135,22 @@ namespace Sr.Reminder.WebApi.Controllers
 			}
 			var reminder = _Mapper.Map<Core.Dal.Reminder>(value);
 
+			var entity = await _unitOfWork.Reminders.Get(id);
+
+			if (entity == null)
+			{
+				Response.Headers.Add("x-status-reason", $"Reminder with id '{id}' is not found.");
+				return NotFound();
+			}
+
+			entity.Description = value.Description;
+			entity.DueDate = value.DueDate;
+			entity.Name = value.Name;
+			entity.Priority = (int)value.Priority;
+			entity.Updated = DateTime.UtcNow;
+
+			await _unitOfWork.CommitAsync();
+
 			//var updated = await _reminderRepository.Update(reminder);
 			//if (updated == null || updated.Id <= 0)
 			//{
@@ -142,8 +160,6 @@ namespace Sr.Reminder.WebApi.Controllers
 
 			//var result = _Mapper.Map<Models.Reminder>(updated);
 			//return this.Ok(result);
-
-			await _reminderRepository.Update(reminder);
 
 			return NoContent();
 		}
@@ -161,13 +177,17 @@ namespace Sr.Reminder.WebApi.Controllers
 		[ProducesDefaultResponseType]
 		public async Task<ActionResult<bool>> Delete(int id)
 		{
-			var reminder = await _reminderRepository.GetById(id);
+			var reminder = await _unitOfWork.Reminders.Get(id);
 
 			if (reminder == null)
 			{
 				Response.Headers.Add("x-status-reason", $"Reminder with id '{id}' is not found.");
 				return NotFound();
 			}
+
+			_unitOfWork.Reminders.Remove(reminder);
+
+			await _unitOfWork.CommitAsync();
 
 			//var result = await _reminderRepository.Remove(reminder);
 			//if (!result)
@@ -177,7 +197,7 @@ namespace Sr.Reminder.WebApi.Controllers
 			//}
 			//return this.Ok(result);
 
-			await _reminderRepository.Remove(reminder);
+
 			return NoContent();
 		}
 	}

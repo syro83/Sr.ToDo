@@ -12,56 +12,43 @@ namespace Sr.Reminder.Core.Repositories
 {
 	public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 	{
-		protected Dal.SrReminderContext Context;
+		protected Dal.SrReminderContext _context;
+		protected readonly DbSet<T> _entities;
 
 		public RepositoryBase(Dal.SrReminderContext context)
 		{
-			Context = context;
+			_context = context;
+			_entities = _context.Set<T>();
+		}
+
+		public ValueTask<T> Get(params object[] keyValues)
+		{
+			return _entities.FindAsync(keyValues);
 		}
 
 		public Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate)
 		{
-			return Context.Set<T>().FirstOrDefaultAsync(predicate);
-		}
-
-		public async Task Add(T entity)
-		{
-			// await Context.AddAsync(entity);
-			await Context.Set<T>().AddAsync(entity);
-			await Context.SaveChangesAsync();
-		}
-
-		public Task Update(T entity)
-		{
-			// In case AsNoTracking is used
-			Context.Entry(entity).State = EntityState.Modified;
-			return Context.SaveChangesAsync();
-		}
-
-		public Task Remove(T entity)
-		{
-			Context.Set<T>().Remove(entity);
-			return Context.SaveChangesAsync();
+			return _entities.FirstOrDefaultAsync(predicate);
 		}
 
 		public async Task<IEnumerable<T>> GetAll()
 		{
-			return await Context.Set<T>().ToListAsync();
+			return await _context.Set<T>().ToListAsync();
 		}
 
-		public async Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate)
+		public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate)
 		{
-			return await Context.Set<T>().Where(predicate).ToListAsync();
+			return await _context.Set<T>().Where(predicate).ToListAsync();
 		}
 
-		public Task<int> CountAll()
+		public async void Add(T entity)
 		{
-			return Context.Set<T>().CountAsync();
+			_entities.Add(entity);
 		}
 
-		public Task<int> CountWhere(Expression<Func<T, bool>> predicate)
+		public void Remove(T entity)
 		{
-			return Context.Set<T>().CountAsync(predicate);
-		}
+			_entities.Remove(entity);
+		}		
 	}
 }

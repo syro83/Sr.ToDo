@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace Sr.Reminder.Core.Repositories
 {
-	public interface IRepositoryBase<T>
+	public interface IRepositoryBase<T> where T : class
 	{
+		ValueTask<T> Get(params object[] keyValues);
 		Task<T> FirstOrDefault(Expression<Func<T, bool>> predicate);
-
-		Task Add(T entity);
-		Task Update(T entity);
-		Task Remove(T entity);
-
 		Task<IEnumerable<T>> GetAll();
-		Task<IEnumerable<T>> GetWhere(Expression<Func<T, bool>> predicate);
+		Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate);
 
-		Task<int> CountAll();
-		Task<int> CountWhere(Expression<Func<T, bool>> predicate);
+		void Add(T entity);
+
+		void Remove(T entity);
 	}
 }
