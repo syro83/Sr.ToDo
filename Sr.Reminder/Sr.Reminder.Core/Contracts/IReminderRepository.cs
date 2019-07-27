@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sr.Reminder.Core.Repositories
+namespace Sr.Reminder.Core.Contracts
 {
 	public interface IReminderRepository : IRepositoryBase<Dal.Reminder>
 	{

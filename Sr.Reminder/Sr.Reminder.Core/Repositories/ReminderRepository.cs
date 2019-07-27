@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sr.Reminder.Core.Contracts;
 using Sr.Reminder.Core.Dal;
 
 namespace Sr.Reminder.Core.Repositories

@@ -19,8 +19,9 @@ namespace Sr.Reminder.Core.Dal
         public virtual DbSet<Reminder> Reminder { get; set; }
         public virtual DbSet<ReminderCategory> ReminderCategory { get; set; }
         public virtual DbSet<Task> Task { get; set; }
+		public virtual DbSet<ToDo> ToDo { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -78,7 +79,14 @@ namespace Sr.Reminder.Core.Dal
                     .HasConstraintName("FK_Task_Reminder");
             });
 
-            OnModelCreatingPartial(modelBuilder);
+			modelBuilder.Entity<Reminder>(entity =>
+			{
+				entity.HasIndex(e => e.Name);
+				
+				entity.Property(e => e.Name).IsFixedLength();
+			});
+
+			OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

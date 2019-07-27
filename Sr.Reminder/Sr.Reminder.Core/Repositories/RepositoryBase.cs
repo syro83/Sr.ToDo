@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sr.Reminder.Core.Contracts;
 using Sr.Reminder.Core.Dal;
 using Task = System.Threading.Tasks.Task;
 

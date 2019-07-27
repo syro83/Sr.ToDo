@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sr.Reminder.Core.Repositories
+namespace Sr.Reminder.Core.Contracts
 {
 	public interface IRepositoryBase<T> where T : class
 	{

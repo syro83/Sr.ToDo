@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Sr.Reminder.Core.Contracts;
 
 namespace Sr.Reminder.Core.Repositories
 {
@@ -11,11 +12,14 @@ namespace Sr.Reminder.Core.Repositories
 
 		public IReminderRepository Reminders { get; private set; }
 
+		public IToDoRepository ToDos { get; private set; }
+
 		public UnitOfWork(Dal.SrReminderContext context)
 		{
 
 			this._context = context;
 			Reminders = new ReminderRepository(context);
+			ToDos = new ToDoRepository(context);
 		}
 
 		public int Commit()

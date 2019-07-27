@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Sr.Reminder.Core.Contracts;
 using Sr.Reminder.Core.Repositories;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -53,6 +54,7 @@ namespace Sr.Reminder.WebApi
 			// DI repose
 			services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 			services.AddScoped(typeof(IReminderRepository), typeof(ReminderRepository));
+			services.AddScoped(typeof(IToDoRepository), typeof(ToDoRepository));
 			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 		}
 

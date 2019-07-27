@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Sr.Reminder.Core.Contracts;
 using Sr.Reminder.Core.Repositories;
 
 namespace Sr.Reminder.WebApi.Controllers
@@ -52,7 +53,7 @@ namespace Sr.Reminder.WebApi.Controllers
 		}
 
 		// GET: api/Reminder/5
-		[HttpGet("{id}", Name = "Get")]
+		[HttpGet("{id}", Name = "GetReminder")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesDefaultResponseType]
