@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Sr.ToDo.Core.Contracts
 {
@@ -10,7 +7,9 @@ namespace Sr.ToDo.Core.Contracts
 		IToDoRepository ToDos { get; }
 
 		int Commit();
+
 		Task<int> CommitAsync();
+
 		void Rollback();
 	}
 }

@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Sr.ToDo.Core.Contracts;
-using Sr.ToDo.Core.Dal;
-using Task = System.Threading.Tasks.Task;
 
 namespace Sr.ToDo.Core.Repositories
 {
@@ -50,6 +47,6 @@ namespace Sr.ToDo.Core.Repositories
 		public void Remove(T entity)
 		{
 			_entities.Remove(entity);
-		}		
+		}
 	}
 }

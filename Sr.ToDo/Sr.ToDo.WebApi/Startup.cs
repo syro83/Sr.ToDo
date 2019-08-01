@@ -1,22 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Sr.ToDo.Core.Contracts;
 using Sr.ToDo.Core.Repositories;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Sr.ToDo.WebApi
 {
@@ -53,7 +46,6 @@ namespace Sr.ToDo.WebApi
 
 			// DI repose
 			services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-			services.AddScoped(typeof(IReminderRepository), typeof(ReminderRepository));
 			services.AddScoped(typeof(IToDoRepository), typeof(ToDoRepository));
 			services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
 		}
@@ -67,7 +59,8 @@ namespace Sr.ToDo.WebApi
 			}
 			else
 			{
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				// The default HSTS value is 30 days. You may want to change this for production
+				// scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
@@ -81,26 +74,23 @@ namespace Sr.ToDo.WebApi
 			app.UseHttpsRedirection();
 			app.UseAuthorization();
 
-			// Core 3.0 executes the endpoint that was selected by routing.
-			// https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-core-3-0-preview-4/
+			// Core 3.0 executes the endpoint that was selected by routing. https://devblogs.microsoft.com/aspnet/asp-net-core-updates-in-net-core-3-0-preview-4/
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
 				//endpoints.MapRazorPages();
 			});
-			
 
 			// Enable middleware to serve generated Swagger as a JSON endpoint.
 			app.UseSwagger();
 
-			// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
-			// specifying the Swagger JSON endpoint.
+			// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger
+			// JSON endpoint.
 			app.UseSwaggerUI(c =>
 			{
 				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sr.ToDo V1");
 				c.RoutePrefix = string.Empty;
 			});
-
 		}
 	}
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Sr.ToDo.Core.Contracts;
-using Sr.ToDo.Core.Dal;
+﻿using Sr.ToDo.Core.Contracts;
 
 namespace Sr.ToDo.Core.Repositories
 {
@@ -13,6 +7,5 @@ namespace Sr.ToDo.Core.Repositories
 		public ToDoRepository(Dal.SrToDoContext context) : base(context)
 		{
 		}
-
 	}
 }

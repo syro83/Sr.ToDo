@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Sr.ToDo.Core.Contracts;
 
 namespace Sr.ToDo.Core.Repositories
@@ -14,7 +11,6 @@ namespace Sr.ToDo.Core.Repositories
 
 		public UnitOfWork(Dal.SrToDoContext context)
 		{
-
 			this._context = context;
 			ToDos = new ToDoRepository(context);
 		}
@@ -23,6 +19,7 @@ namespace Sr.ToDo.Core.Repositories
 		{
 			return _context.SaveChanges();
 		}
+
 		public async Task<int> CommitAsync()
 		{
 			return await _context.SaveChangesAsync();

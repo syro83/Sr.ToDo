@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sr.ToDo.Core.Contracts;
-using Sr.ToDo.Core.Repositories;
 
 namespace Sr.ToDo.WebApi.Controllers
 {
@@ -18,7 +16,6 @@ namespace Sr.ToDo.WebApi.Controllers
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		protected IMapper _Mapper = null;
-
 
 		public ToDoController(IUnitOfWork uow)
 		{
@@ -32,7 +29,6 @@ namespace Sr.ToDo.WebApi.Controllers
 			});
 			_Mapper = config.CreateMapper();
 		}
-
 
 		// GET: api/ToDo
 		[HttpGet]
@@ -65,25 +61,18 @@ namespace Sr.ToDo.WebApi.Controllers
 			return this.Ok(result);
 		}
 
-
 		/// <summary>
 		/// Creates a ToDo.
 		/// </summary>
 		/// <remarks>
 		/// Sample request:
 		///
-		///     POST /ToDo
-		///     {
-		///        "id": 1,
-		///        "name": "Item1",
-		///        "isComplete": true
-		///     }
-		///
+		/// POST /ToDo { "id": 1, "name": "Item1", "isComplete": true }
 		/// </remarks>
 		/// <param name="value"></param>
 		/// <returns>A newly created ToDo</returns>
 		/// <response code="201">Returns the newly created ToDo</response>
-		/// <response code="400">If the ToDo is null</response>   
+		/// <response code="400">If the ToDo is null</response>
 		// POST: api/ToDo
 		[HttpPost]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -161,7 +150,7 @@ namespace Sr.ToDo.WebApi.Controllers
 		/// <summary>
 		/// Deletes a specific ToDo.
 		/// </summary>
-		/// <param name="id"></param> 
+		/// <param name="id"></param>
 		// DELETE: api/ToDo/5
 		[HttpDelete("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -190,7 +179,6 @@ namespace Sr.ToDo.WebApi.Controllers
 			//	this.BadRequest();
 			//}
 			//return this.Ok(result);
-
 
 			return NoContent();
 		}
