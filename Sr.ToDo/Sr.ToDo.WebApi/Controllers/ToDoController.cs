@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,9 @@ using Sr.ToDo.Core.Contracts;
 
 namespace Sr.ToDo.WebApi.Controllers
 {
+	/// <summary>
+	/// Represents a collection of functions to interact with the ToDo API endpoints
+	/// </summary>
 	[Produces("application/json")]
 	[ApiConventionType(typeof(DefaultApiConventions))]
 	[Route("api/[controller]")]
@@ -31,6 +35,12 @@ namespace Sr.ToDo.WebApi.Controllers
 		}
 
 		// GET: api/ToDo
+		/// <summary>
+		/// Fetch all ToDos
+		/// </summary>
+		/// <remarks>Returns all ToDo entities</remarks>
+		/// <returns>List&lt;ToDo?&gt;</returns>
+		/// <exception cref="Sr.ToDo.WebApi.ApiException">Thrown when fails to make API call</exception>
 		[HttpGet]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesDefaultResponseType]
@@ -43,11 +53,19 @@ namespace Sr.ToDo.WebApi.Controllers
 		}
 
 		// GET: api/ToDo/5
+		/// <summary>
+		/// Find ToDo by ID
+		/// </summary>
+		/// <param name="id">The id of ToDo that needs to be fetched</param>
+		/// <remarks>Returns a single ToDo</remarks>
+		/// <returns>ToDo</returns>
+		/// <response code="200">Returned ToDo</response>
+		/// <response code="404">If the ToDo with the supplied id is not found</response>
 		[HttpGet("{id}", Name = "GetToDo")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesDefaultResponseType]
-		public async Task<ActionResult<Models.ToDo>> Get(int id)
+		public async Task<ActionResult<Models.ToDo>> Get([Required] int id)
 		{
 			var toDo = await _unitOfWork.ToDos.Get(id);
 
@@ -61,26 +79,22 @@ namespace Sr.ToDo.WebApi.Controllers
 			return this.Ok(result);
 		}
 
+		// POST: api/ToDo
 		/// <summary>
-		/// Creates a ToDo.
+		/// Add a new ToDo
 		/// </summary>
-		/// <remarks>
-		/// Sample request:
-		///
-		/// POST /ToDo { "id": 1, "name": "Item1", "isComplete": true }
-		/// </remarks>
-		/// <param name="value"></param>
+		/// <remarks></remarks>
+		/// <param name="value">ToDo object that needs to be added</param>
 		/// <returns>A newly created ToDo</returns>
 		/// <response code="201">Returns the newly created ToDo</response>
-		/// <response code="400">If the ToDo is null</response>
-		// POST: api/ToDo
+		/// <response code="400">If the ToDo is null or when the id is non zero.</response>
 		[HttpPost]
-		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status201Created)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesDefaultResponseType]
-		public async Task<ActionResult<Models.ToDo>> Post([FromBody] Models.ToDo value)
+		public async Task<ActionResult<Models.ToDo>> Post([FromBody, Required] Models.ToDo value)
 		{
-			if (value.Id > 0)
+			if (value.Id != 0)
 			{
 				Response.Headers.Add("x-status-reason", $"ToDo should not have an non positive id '{value.Id}' ");
 				return BadRequest();
@@ -105,12 +119,23 @@ namespace Sr.ToDo.WebApi.Controllers
 		}
 
 		// PUT: api/ToDo/5
+		/// <summary>
+		/// Updates a specific ToDo
+		/// </summary>
+		/// <param name="id">The id of ToDo that needs to be updated</param>
+		/// <param name="value">ToDo object that needs to be updated</param>
+		/// <returns>NoContent</returns>
+		/// <response code="204">Returns the updated item</response>
+		/// <response code="400">
+		/// If the item is null or when the id does not matches the id of the item.
+		/// </response>
+		/// <response code="404">If the ToDo with the supplied id is not found</response>
 		[HttpPut("{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesDefaultResponseType]
-		public async Task<ActionResult<Models.ToDo>> Put(int id, [FromBody] Models.ToDo value)
+		public async Task<ActionResult<Models.ToDo>> Put(int id, [FromBody, Required] Models.ToDo value)
 		{
 			if (id != value.Id)
 			{
@@ -147,14 +172,15 @@ namespace Sr.ToDo.WebApi.Controllers
 			return NoContent();
 		}
 
-		/// <summary>
-		/// Deletes a specific ToDo.
-		/// </summary>
-		/// <param name="id"></param>
 		// DELETE: api/ToDo/5
+		/// <summary>
+		/// Deletes a specific ToDo
+		/// </summary>
+		/// <param name="id">The id of ToDo that needs to be deleted</param>
+		/// <returns>NoContent</returns>
+		/// <response code="204">Returns no content</response>
+		/// <response code="404">If the ToDo with the supplied id is not found</response>
 		[HttpDelete("{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		[ProducesResponseType(StatusCodes.Status204NoContent)]
 		[ProducesDefaultResponseType]
