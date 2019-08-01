@@ -1,2 +1,3 @@
 # Expirementing with Asp.net Core 3 Web Api and Angular 8.
-My small ToDo list application, a place to experiment with Asp.net Core 3 Web Api and Angular 8. Try to have a small clean arichtecture. Use of the Repository Pattern with the Unit Of Work Pattern inline with Martin Fowler intention, so the repository is viewed as memory object. Used Entity Framework (EF) as ORM (object-relational mapping).
+My small ToDo list application, a place to experiment with Asp.net Core 3 Web Api and Angular 8. Try to have a small clean arichtecture. Use of the Repository Pattern with the Unit Of Work Pattern inline with Martin Fowler intention, so the repository is viewed as memory object. Used Entity Framework (EF) as ORM (object-relational mapping). I added a generic repository for the methods Get, GetAll, Add, Remove, Find and FirstOrDefault. 
+Used other good practices like Dependey Injection and have a Swagger documentation and UI for the Web Api.
